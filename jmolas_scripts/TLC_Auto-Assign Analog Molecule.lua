@@ -1,7 +1,12 @@
--- @description Analog Molecule Matrix Console
--- @version 4.0
+-- @description TLC_Analog Molecule Matrix Console
+-- @version 1.0
 -- @author Jordi Molas - The Little Cavern Studio
--- @about Matrix Console for massive Analog Molecule configuration. Optimizes hybrid analog/digital workflows
+-- @about This external Lua script scans your session and automatically changes the topology of each track based on a smart configuration. You can define exactly where to apply each topology using keywords:
+-- Master: If you use a track named, for instance, "Mixbus" instead of the default REAPER Master, you can specify it in the Settings.
+-- Buses: You can identify group tracks using keywords like "Bus", "Grp", or "Stems".
+-- Channels: Individual tracks are identified as "Channel" topology by default, but you can add exceptions for tracks like "Aux" or "Click" to be ignored.
+-- Additionally, it offers a fast, global way to push an initial setup for the 3 main console emulation values (3D Flux, Thermal Bloom, and Analog Texture) to all your instances at once.
+
 
 local plugin_name = "Analog Molecule"
 local ext_section = "JORDAN_AM_MATRIX"

@@ -1,7 +1,10 @@
--- @description Setlist Manager
--- @version 1.1.4
+-- @description TLC - Setlist Manager Pro
+-- @version 1.0
 -- @author Jordi Molas - The Little Cavern Studio
--- @about Load as many projects at the same time as you define in the setlist
+-- @about
+--   Automates the loading of multiple RPP files into project tabs.
+--   Ideal for large-scale sessions, EPs, or live setlists. 
+--   Saves time by eliminating manual one-by-one project loading.
 
 local reaper = reaper
 local imgui = reaper.ImGui_CreateContext('Setlist_Manager_Pro')

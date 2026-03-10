@@ -1,12 +1,13 @@
--- @description The Little Cavern Dashboard
--- @version 5.8
+-- @description TLC Dashboard Installer
+-- @version 1.0
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about
 --   Dynamic dashboard for launching sessions and recent projects.
+--   This script only ease the load of Dashboard and its setup
 --   
---   =========================================
+--   ======================================
 --   🛑 AUTO-BOOT SETUP INSTRUCTIONS 🛑
---   =========================================
+--   ======================================
 --   To make this dashboard open automatically when Reaper starts:
 --   
 --   1. Open the Actions List in Reaper (shortcut: ?).
@@ -16,4 +17,4 @@
 --   5. Paste the ID and hit OK!
 -- @provides
 --   [main] TLC_Dashboard.lua
---   [main] Session Builder.lua
+--   [main] TLC_Dashboard_Setup.lua

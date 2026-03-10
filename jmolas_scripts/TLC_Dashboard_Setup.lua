@@ -1,8 +1,8 @@
 -- @noindex
--- Session Builder (The Bridge - Advanced Input)
--- Version 2.3
+-- TLC Dashboard Setup
+-- Version 1.0
 -- Author: Jordi Molas - The Little Cavern Studio
--- About: This script allows you to configure your studio name, sessions, and templates.
+-- About: This script allows you to configure how you want start your studio name, sessions, and templates.
 
 
 local db_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/Session_DB.txt"
