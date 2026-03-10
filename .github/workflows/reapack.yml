@@ -11,7 +11,7 @@ jobs:
         run: |
           gem install --user-install reapack-index
           git config user.name "The Little Cavern Bot"
-          git config user.name "thelittlecavernstudio-dev@users.noreply.github.com"
+          git config user.email "thelittlecavernstudio-dev@users.noreply.github.com"
           /home/runner/.local/share/gem/ruby/3.2.0/bin/reapack-index --commit --name "The Little Cavern Studio"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
