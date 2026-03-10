@@ -10,8 +10,9 @@ This collection features custom-engineered tools designed to streamline **REAPER
 
 ## 🛠 Included Scripts:
 
-### 🚀 Dynamic Session Launcher (`__startup.lua`)
+### 🚀 Dynamic Session Launcher (`TLC_Dashboard.lua`)
 The heart of the workflow. A visual dashboard that triggers upon REAPER launch, allowing you to choose session types or open recent projects instantly.
+It is very important read About section to learn how configure the startup screen.
 
 ### 🏗 Session Builder.lua
 The visual configurator for the Launcher. Customize studio names, templates, and button colors without ever touching a single line of code. It automatically manages the `Session_DB.txt` database.
@@ -34,8 +35,3 @@ If you find these tools helpful, feel free to follow the studio and share your f
 * 🎸 **Hispasonic:** [Jordi Molas Profile](https://www.hispasonic.com/usuarios/jordimolas)
 
 ---
-
-## 📦 Installation
-1. Download the repository content.
-2. Place the `jmolas_scripts` folder and the `__startup.lua` file into your REAPER Scripts directory.
-3. Run `__startup.lua` from the Action List to initialize the Dashboard.
