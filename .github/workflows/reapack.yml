@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install ReaPack Indexer
-        run: gem install reapack-index
-      - name: Generate Index
-        run: reapack-index --commit
+      - name: Install and Run Indexer
+        run: |
+          gem install --user-install reapack-index
+          $(gem src)/bin/reapack-index --commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
