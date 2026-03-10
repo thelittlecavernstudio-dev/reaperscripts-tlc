@@ -1,2 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="The Little Cavern Studio"/>
+<index version="1" name="The Little Cavern Studio" commit="2fa57c5d7393e22a58b09a15b3a9c96c81a4e7ae">
+  <category name="jmolas_scripts">
+    <reapack name="Auto-Assign Analog Molecule.lua" type="script" desc="Analog Molecule Matrix Console">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Matrix Console for massive Analog Molecule configuration. Optimizes hybrid analog/digital workflows\par}
+}
+]]></description>
+      </metadata>
+      <version name="4.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T17:48:21Z">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/2fa57c5d7393e22a58b09a15b3a9c96c81a4e7ae/jmolas_scripts/Auto-Assign%20Analog%20Molecule.lua</source>
+      </version>
+    </reapack>
+    <reapack name="locate_peaks_item.lua" type="script" desc="Locate True Peaks (Math Engine)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 High-precision Math Engine for True Peak localization.\par}
+}
+]]></description>
+      </metadata>
+      <version name="10.1" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T17:48:21Z">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/2fa57c5d7393e22a58b09a15b3a9c96c81a4e7ae/jmolas_scripts/locate_peaks_item.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Setlist Manager Pro.lua" type="script" desc="Setlist Manager">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Load as many projects at the same time as you define in the setlist\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.1.4" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T17:48:21Z">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/2fa57c5d7393e22a58b09a15b3a9c96c81a4e7ae/jmolas_scripts/Setlist%20Manager%20Pro.lua</source>
+      </version>
+    </reapack>
+  </category>
+</index>
