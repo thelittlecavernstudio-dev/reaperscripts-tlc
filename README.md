@@ -1,4 +1,7 @@
 # 🎹 The Little Cavern Studio - Reaper Scripts 🚀
+<p align="center">
+  <img src="The Little Cavern (Logo) - Jordi Molas.png" alt="The Little Cavern Studio Logo" width="400">
+</p>
 
 Welcome to the official **The Little Cavern Studio** repository! 
 This collection features custom-engineered tools designed to streamline **REAPER** workflows, focusing on hybrid production, professional mixing, and session management.
