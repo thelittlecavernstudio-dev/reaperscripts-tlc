@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="The Little Cavern Studio" commit="f625d7c6413f511e33f54d8c808ff4c1d572a389">
+<index version="1" name="The Little Cavern Studio" commit="7562c8fa57b1da77dd98a39157d7cb4d634d9b75">
   <category name="jmolas_scripts">
     <reapack name="TLC_Auto-Assign Analog Molecule.lua" type="script" desc="TLC_Analog Molecule Matrix Console">
       <metadata>
@@ -43,7 +43,7 @@
         <source main="main" file="TLC_Dashboard_Setup.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/f625d7c6413f511e33f54d8c808ff4c1d572a389/jmolas_scripts/TLC_Dashboard_Setup.lua</source>
       </version>
     </reapack>
-    <reapack name="TLC_Setlist Manager.lua" type="script" desc="TLC - Setlist Manager Pro">
+    <reapack name="TLC_Setlist Manager.lua" type="script" desc="TLC_Setlist Manager Pro">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
 {\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
