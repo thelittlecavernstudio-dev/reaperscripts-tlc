@@ -1,2 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="The Little Cavern Studio"/>
+<index version="1" name="The Little Cavern Studio">
+  <category name="jmolas_scripts">
+    <reapack name="Session Builder.lua" type="script" vcs="jmolas_scripts/Session Builder.lua">
+      <version name="1.0">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Session%20Builder.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Auto-Assign Analog Molecule.lua" type="script" vcs="jmolas_scripts/Auto-Assign Analog Molecule.lua">
+      <version name="1.0">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Auto-Assign%20Analog%20Molecule.lua</source>
+      </version>
+    </reapack>
+    <reapack name="locate_peaks_item.lua" type="script" vcs="jmolas_scripts/locate_peaks_item.lua">
+      <version name="1.0">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/locate_peaks_item.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Setlist Manager Pro.lua" type="script" vcs="jmolas_scripts/Setlist Manager Pro.lua">
+      <version name="1.0">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Setlist Manager Pro.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Main">
+    <reapack name="__startup.lua" type="script" vcs="__startup.lua">
+      <version name="5.5">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/__startup.lua</source>
+      </version>
+    </reapack>
+  </category>
+</index>
