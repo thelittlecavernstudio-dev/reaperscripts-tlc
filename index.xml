@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="The Little Cavern Studio" commit="2fa57c5d7393e22a58b09a15b3a9c96c81a4e7ae">
+<index version="1" name="The Little Cavern Studio" commit="c8cdead73602d47b250631301ba6d41977442f44">
   <category name="jmolas_scripts">
     <reapack name="Auto-Assign Analog Molecule.lua" type="script" desc="Analog Molecule Matrix Console">
       <metadata>
@@ -41,6 +41,29 @@
       </metadata>
       <version name="1.1.4" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T17:48:21Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/2fa57c5d7393e22a58b09a15b3a9c96c81a4e7ae/jmolas_scripts/Setlist%20Manager%20Pro.lua</source>
+      </version>
+    </reapack>
+    <reapack name="TLC_Dashboard_Installer.lua" type="script" desc="The Little Cavern Dashboard">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Dynamic dashboard for launching sessions and recent projects.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 ========================================= \u55357 ?\u57041 ? AUTO-BOOT SETUP INSTRUCTIONS \u55357 ?\u57041 ?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 To make this dashboard open automatically when Reaper starts:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Open the Actions List in Reaper (shortcut: ?).\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab Search for "TLC Dashboard".\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab Right-click on it and select "Copy selected action command ID".\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 4.\tx360\tab In the top menu, go to: Extensions > SWS Options > Enable global startup action.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 5.\tx360\tab Paste the ID and hit OK!\sa180\par}
+}
+]]></description>
+      </metadata>
+      <version name="5.8" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T18:14:53Z">
+        <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c8cdead73602d47b250631301ba6d41977442f44/jmolas_scripts/TLC_Dashboard_Installer.lua</source>
+        <source main="main" file="TLC_Dashboard.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c8cdead73602d47b250631301ba6d41977442f44/jmolas_scripts/TLC_Dashboard.lua</source>
+        <source main="main" file="Session Builder.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c8cdead73602d47b250631301ba6d41977442f44/jmolas_scripts/Session%20Builder.lua</source>
       </version>
     </reapack>
   </category>
