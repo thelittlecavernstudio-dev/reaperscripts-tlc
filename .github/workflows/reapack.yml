@@ -13,5 +13,6 @@ jobs:
           git config user.name "The Little Cavern Bot"
           git config user.email "thelittlecavernstudio-dev@users.noreply.github.com"
           /home/runner/.local/share/gem/ruby/3.2.0/bin/reapack-index --commit --name "The Little Cavern Studio"
+          git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
