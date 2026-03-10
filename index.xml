@@ -1,46 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <index version="1" name="The Little Cavern Studio">
   <category name="jmolas_scripts">
-    <reapack name="Session Builder.lua" type="script" vcs="jmolas_scripts/Session Builder.lua">
+    <reapack name="Session Builder.lua" type="script" desc="Session Builder">
       <metadata>
-        <description>Advanced tool for creating and structuring professional work sessions in Reaper.</description>
-        <link rel="website">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc</link>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Session Builder\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Advanced tool for creating and structuring professional work sessions in Reaper.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b Author: Jordi Molas - The Little Cavern Studio\par}
+}]]></description>
       </metadata>
-      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T15:00:00Z">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T18:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Session%20Builder.lua</source>
       </version>
     </reapack>
-    <reapack name="Auto-Assign Analog Molecule.lua" type="script" vcs="jmolas_scripts/Auto-Assign Analog Molecule.lua">
+
+    <reapack name="Auto-Assign Analog Molecule.lua" type="script" desc="Auto-Assign Analog Molecule">
       <metadata>
-        <description>Automated parameter assignment and routing workflow specifically designed for Analog Molecule.</description>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Auto-Assign Analog Molecule\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Automated parameter assignment and routing workflow specifically designed for Analog Molecule.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b Author: Jordi Molas - The Little Cavern Studio\par}
+}]]></description>
       </metadata>
-      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T15:00:00Z">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T18:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Auto-Assign%20Analog%20Molecule.lua</source>
       </version>
     </reapack>
-    <reapack name="locate_peaks_item.lua" type="script" vcs="jmolas_scripts/locate_peaks_item.lua">
+
+    <reapack name="locate_peaks_item.lua" type="script" desc="Locate Peaks Item">
       <metadata>
-        <description>Quickly identifies and locates peak volume levels and transients within selected items.</description>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Locate Peaks Item\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Quickly identifies and locates peak volume levels and transients within selected items.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b Author: Jordi Molas - The Little Cavern Studio\par}
+}]]></description>
       </metadata>
-      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T15:00:00Z">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T18:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/locate_peaks_item.lua</source>
       </version>
     </reapack>
-    <reapack name="Setlist Manager Pro.lua" type="script" vcs="jmolas_scripts/Setlist Manager Pro.lua">
+
+    <reapack name="Setlist Manager Pro.lua" type="script" desc="Setlist Manager Pro">
       <metadata>
-        <description>Professional setlist manager to organize projects, songs, and performance order.</description>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Setlist Manager Pro\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Professional setlist manager to organize projects, songs, and performance order.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b Author: Jordi Molas - The Little Cavern Studio\par}
+}]]></description>
       </metadata>
-      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T15:00:00Z">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T18:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Setlist%20Manager%20Pro.lua</source>
       </version>
     </reapack>
   </category>
+
   <category name="Main">
-    <reapack name="__startup.lua" type="script" vcs="__startup.lua">
+    <reapack name="__startup.lua" type="script" desc="The Little Cavern Dashboard">
       <metadata>
-        <description>Main startup engine and dashboard for dynamic loading of sessions and recent projects.</description>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 The Little Cavern Dashboard\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Main startup engine for dynamic loading of sessions and recent projects.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b Author: Jordi Molas - The Little Cavern Studio\par}
+}]]></description>
       </metadata>
-      <version name="5.5" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T15:00:00Z">
+      <version name="5.5" author="Jordi Molas - The Little Cavern Studio" time="2026-03-10T18:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/__startup.lua</source>
       </version>
     </reapack>
