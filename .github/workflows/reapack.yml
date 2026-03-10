@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'index.xml' # Evitamos bucles infinitos
+      - 'index.xml' # Para que el robot no entre en bucle
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
         run: |
           git config user.name "The Little Cavern Bot"
           git config user.email "thelittlecavernstudio-dev@users.noreply.github.com"
-          reapack-index --commit --name "The Little Cavern Studio" --about "README.md"
+          reapack-index --commit --name "The Little Cavern Studio"
           
       - name: Push changes
         run: git push origin main
