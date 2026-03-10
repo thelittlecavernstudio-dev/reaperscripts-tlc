@@ -10,6 +10,7 @@
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Session%20Builder.lua</source>
       </version>
     </reapack>
+    
     <reapack name="Auto-Assign Analog Molecule.lua" type="script" vcs="jmolas_scripts/Auto-Assign Analog Molecule.lua">
       <metadata>
         <description><![CDATA[Automated parameter assignment and routing workflow specifically designed for Analog Molecule.]]></description>
@@ -18,6 +19,7 @@
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Auto-Assign%20Analog%20Molecule.lua</source>
       </version>
     </reapack>
+    
     <reapack name="locate_peaks_item.lua" type="script" vcs="jmolas_scripts/locate_peaks_item.lua">
       <metadata>
         <description><![CDATA[Quickly identifies and locates peak volume levels and transients within selected items.]]></description>
@@ -26,6 +28,7 @@
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/locate_peaks_item.lua</source>
       </version>
     </reapack>
+    
     <reapack name="Setlist Manager Pro.lua" type="script" vcs="jmolas_scripts/Setlist Manager Pro.lua">
       <metadata>
         <description><![CDATA[Professional setlist manager to organize projects, songs, and performance order.]]></description>
@@ -35,6 +38,7 @@
       </version>
     </reapack>
   </category>
+
   <category name="Main">
     <reapack name="__startup.lua" type="script" vcs="__startup.lua">
       <metadata>
