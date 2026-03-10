@@ -4,6 +4,7 @@ jobs:
   index:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: cfillion/reapack-index-action@master
-        with: { token: "${{ secrets.GITHUB_TOKEN }}" }
+      - uses: actions/checkout@v4
+      - uses: cfillion/reapack-index-action@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
