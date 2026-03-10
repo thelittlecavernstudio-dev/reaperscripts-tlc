@@ -8,6 +8,6 @@ jobs:
       - name: Install and Run Indexer
         run: |
           gem install --user-install reapack-index
-          $(gem src)/bin/reapack-index --commit
+          /home/runner/.local/share/gem/ruby/3.2.0/bin/reapack-index --commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
