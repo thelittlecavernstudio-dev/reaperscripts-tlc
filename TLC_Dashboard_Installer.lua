@@ -1,5 +1,5 @@
 -- @description The Little Cavern Dashboard
--- @version 5.5
+-- @version 5.6
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about Dynamic dashboard for launching sessions and recent projects.
 -- @provides
