@@ -1,0 +1,37 @@
+name: ReaPack Indexer
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'index.xml' # Evitamos bucles infinitos
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+
+      - name: Install ReaPack Indexer
+        run: gem install reapack-index
+
+      - name: Execute Indexer
+        run: |
+          git config user.name "The Little Cavern Bot"
+          git config user.email "thelittlecavernstudio-dev@users.noreply.github.com"
+          reapack-index --commit --name "The Little Cavern Studio" --about "README.md"
+          
+      - name: Push changes
+        run: git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
