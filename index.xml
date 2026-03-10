@@ -2,43 +2,45 @@
 <index version="1" name="The Little Cavern Studio">
   <category name="jmolas_scripts">
     <reapack name="Session Builder.lua" type="script" vcs="jmolas_scripts/Session Builder.lua">
-      <author>Jordi Molas - The Little Cavern Studio</author>
-      <description><![CDATA[Advanced tool for creating and structuring professional work sessions in Reaper.]]></description>
-      <version name="1.0">
+      <metadata>
+        <link rel="website">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc</link>
+        <description><![CDATA[Advanced tool for creating and structuring professional work sessions in Reaper.]]></description>
+      </metadata>
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2024-05-22T12:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Session%20Builder.lua</source>
       </version>
     </reapack>
-    
     <reapack name="Auto-Assign Analog Molecule.lua" type="script" vcs="jmolas_scripts/Auto-Assign Analog Molecule.lua">
-      <author>Jordi Molas - The Little Cavern Studio</author>
-      <description><![CDATA[Automated parameter assignment and routing workflow specifically designed for Analog Molecule.]]></description>
-      <version name="1.0">
+      <metadata>
+        <description><![CDATA[Automated parameter assignment and routing workflow specifically designed for Analog Molecule.]]></description>
+      </metadata>
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2024-05-22T12:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Auto-Assign%20Analog%20Molecule.lua</source>
       </version>
     </reapack>
-    
     <reapack name="locate_peaks_item.lua" type="script" vcs="jmolas_scripts/locate_peaks_item.lua">
-      <author>Jordi Molas - The Little Cavern Studio</author>
-      <description><![CDATA[Quickly identifies and locates peak volume levels and transients within selected items.]]></description>
-      <version name="1.0">
+      <metadata>
+        <description><![CDATA[Quickly identifies and locates peak volume levels and transients within selected items.]]></description>
+      </metadata>
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2024-05-22T12:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/locate_peaks_item.lua</source>
       </version>
     </reapack>
-    
     <reapack name="Setlist Manager Pro.lua" type="script" vcs="jmolas_scripts/Setlist Manager Pro.lua">
-      <author>Jordi Molas - The Little Cavern Studio</author>
-      <description><![CDATA[Professional setlist manager to organize projects, songs, and performance order.]]></description>
-      <version name="1.0">
+      <metadata>
+        <description><![CDATA[Professional setlist manager to organize projects, songs, and performance order.]]></description>
+      </metadata>
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2024-05-22T12:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/jmolas_scripts/Setlist%20Manager%20Pro.lua</source>
       </version>
     </reapack>
   </category>
-
   <category name="Main">
     <reapack name="__startup.lua" type="script" vcs="__startup.lua">
-      <author>Jordi Molas - The Little Cavern Studio</author>
-      <description><![CDATA[Main startup engine and dashboard for dynamic loading of sessions and recent projects.]]></description>
-      <version name="5.5">
+      <metadata>
+        <description><![CDATA[Main startup engine and dashboard for dynamic loading of sessions and recent projects.]]></description>
+      </metadata>
+      <version name="5.5" author="Jordi Molas - The Little Cavern Studio" time="2024-05-22T12:00:00Z">
         <source main="main">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/__startup.lua</source>
       </version>
     </reapack>
