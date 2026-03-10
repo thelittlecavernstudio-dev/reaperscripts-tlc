@@ -1,0 +1,9 @@
+name: ReaPack Index
+on: [push]
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cfillion/reapack-index-action@master
+        with: { token: "${{ secrets.GITHUB_TOKEN }}" }
