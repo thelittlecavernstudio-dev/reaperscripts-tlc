@@ -1,7 +1,0 @@
--- @description The Little Cavern Dashboard
--- @version 5.6
--- @author Jordi Molas - The Little Cavern Studio
--- @about Dynamic dashboard for launching sessions and recent projects.
--- @provides
---   [main] __startup.lua
---   [main] jmolas_scripts/Session Builder.lua
