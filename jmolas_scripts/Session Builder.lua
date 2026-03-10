@@ -1,7 +1,8 @@
+-- @noindex
 -- Session Builder (The Bridge - Advanced Input)
 -- Version 2.3
 -- Author: Jordi Molas - The Little Cavern Studio
--- About: This script allows you to configure your studio name, sessions, and templates through a visual interface, feeding the Dynamic Session Launcher database.
+-- About: This script allows you to configure your studio name, sessions, and templates.
 
 
 local db_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/Session_DB.txt"
