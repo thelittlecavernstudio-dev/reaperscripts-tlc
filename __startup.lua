@@ -1,15 +1,12 @@
---[[
- * ReaScript Name: Dynamic Session Launcher (Dashboard Edition)
- * Description: Advanced session selector and project dashboard
- * @version 5.5
- * @author Jordi Molas - The Little Cavern Studio
- * @about
- * Dynamic dashboard for launching sessions and recent projects.
- * @provides
- * [main] .
- * jmolas_scripts/Session Builder.lua
- * @license GPL v3
---]]
+-- @description Dynamic Session Launcher
+-- @version 5.5
+-- @author Jordi Molas - The Little Cavern Studio
+-- @about
+--   Dynamic dashboard for launching sessions and recent projects.
+-- @provides
+--   [main] .
+--   jmolas_scripts/*.lua
+-- @license GPL v3
 
 local db_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/Session_DB.txt"
 local ini_path = reaper.GetResourcePath() .. "/reaper.ini"

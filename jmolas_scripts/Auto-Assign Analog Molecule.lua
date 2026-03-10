@@ -1,13 +1,9 @@
---[[
- * ReaScript Name: Analog Molecule Matrix Console (Pro Edition)
- * Description: Companion script for massive Analog Molecule configuration
- * @version 4.0
- * @author Jordi Molas - The Little Cavern Studio
- * @about
- * Matrix Console for massive Analog Molecule configuration.
- * Optimizes hybrid analog/digital workflows.
- * @license GPL v3
---]]
+-- @description Analog Molecule Matrix Console
+-- @version 4.0
+-- @author Jordi Molas - The Little Cavern Studio
+-- @about
+-- Matrix Console for massive Analog Molecule configuration
+-- Optimizes hybrid analog/digital workflows
 
 local plugin_name = "Analog Molecule"
 local ext_section = "JORDAN_AM_MATRIX"

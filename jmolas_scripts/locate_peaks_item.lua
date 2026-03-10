@@ -1,13 +1,8 @@
---[[
- * ReaScript Name: Locate True Peaks (Math Engine)
- * Description: Advanced peak detection and localization engine
- * @version 10.1
- * @author Jordi Molas - The Little Cavern Studio
- * @about
- * High-precision Math Engine for True Peak localization.
- * Version 10.1 (English Only, Studio Name & Empty State CTA)
- * @license GPL v3
---]]
+-- @description Locate True Peaks (Math Engine)
+-- @version 10.1
+-- @author Jordi Molas - The Little Cavern Studio
+-- @about
+-- High-precision Math Engine for True Peak localization.
 
 function main()
     local count_sel_items = reaper.CountSelectedMediaItems(0)
