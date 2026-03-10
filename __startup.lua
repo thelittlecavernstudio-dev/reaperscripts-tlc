@@ -1,12 +1,10 @@
--- @description Dynamic Session Launcher
+-- @description The Little Cavern Dashboard
 -- @version 5.5
 -- @author Jordi Molas - The Little Cavern Studio
--- @about
---   Dynamic dashboard for launching sessions and recent projects.
+-- @about Dynamic dashboard for launching sessions and recent projects.
 -- @provides
 --   [main] .
---   jmolas_scripts/*.lua
--- @license GPL v3
+--   [main] jmolas_scripts/Session Builder.lua
 
 local db_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/Session_DB.txt"
 local ini_path = reaper.GetResourcePath() .. "/reaper.ini"

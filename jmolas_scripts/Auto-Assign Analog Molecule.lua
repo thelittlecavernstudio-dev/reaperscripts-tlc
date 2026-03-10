@@ -1,9 +1,7 @@
 -- @description Analog Molecule Matrix Console
 -- @version 4.0
 -- @author Jordi Molas - The Little Cavern Studio
--- @about
--- Matrix Console for massive Analog Molecule configuration
--- Optimizes hybrid analog/digital workflows
+-- @about Matrix Console for massive Analog Molecule configuration. Optimizes hybrid analog/digital workflows
 
 local plugin_name = "Analog Molecule"
 local ext_section = "JORDAN_AM_MATRIX"

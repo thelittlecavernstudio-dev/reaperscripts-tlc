@@ -1,8 +1,7 @@
 -- @description Setlist Manager
 -- @version 1.1.4
 -- @author Jordi Molas - The Little Cavern Studio
--- @about
--- Load as many projects at the same time as you define in the setlist
+-- @about Load as many projects at the same time as you define in the setlist
 
 local reaper = reaper
 local imgui = reaper.ImGui_CreateContext('Setlist_Manager_Pro')

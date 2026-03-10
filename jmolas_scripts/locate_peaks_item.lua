@@ -1,8 +1,7 @@
 -- @description Locate True Peaks (Math Engine)
 -- @version 10.1
 -- @author Jordi Molas - The Little Cavern Studio
--- @about
--- High-precision Math Engine for True Peak localization.
+-- @about High-precision Math Engine for True Peak localization.
 
 function main()
     local count_sel_items = reaper.CountSelectedMediaItems(0)
