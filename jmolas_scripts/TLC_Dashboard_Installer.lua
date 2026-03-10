@@ -5,7 +5,6 @@
 --   Dynamic dashboard for launching sessions and recent projects.
 --   This script only ease the load of Dashboard and its setup
 --   
---   ======================================
 --   🛑 AUTO-BOOT SETUP INSTRUCTIONS 🛑
 --   ======================================
 --   To make this dashboard open automatically when Reaper starts:
