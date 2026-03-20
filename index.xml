@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="The Little Cavern Studio" commit="44f107bb422ef2594980a116aa2fb1b8cf4295ed">
+<index version="1" name="The Little Cavern Studio" commit="14c2f647caae126ef22e3f4af4d3b1b240b882b6">
   <category name="jmolas_scripts">
+    <reapack name="TLC_ABMetrix.jsfx" type="effect" desc="TLC - A/B Metrix">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Simple A/B tool for REAPER. Compare your mix with a reference track, match levels, and solo frequency bands to check your balance. Requires 4 channels on the Master Track (1/2 Mix, 3/4 Reference).\par}
+}
+]]></description>
+        <link rel="website">https://github.com/tu-usuario-de-github/tu-repo</link>
+      </metadata>
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-20T13:33:25Z">
+        <source>https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/14c2f647caae126ef22e3f4af4d3b1b240b882b6/jmolas_scripts/TLC_ABMetrix.jsfx</source>
+      </version>
+    </reapack>
     <reapack name="TLC_Auto-Assign Analog Molecule.lua" type="script" desc="TLC_Analog Molecule Matrix Console">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
@@ -22,7 +37,7 @@
 \widowctrl\hyphauto
 
 {\pard \ql \f0 \sa180 \li0 \fi0 Dynamic dashboard for launching sessions and recent projects. This script only ease the load of Dashboard and its setup\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 ====================================== \u55357 ?\u57041 ? AUTO-BOOT SETUP INSTRUCTIONS \u55357 ?\u57041 ?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \outlinelevel0 \b \fs36 \u55357 ?\u57041 ? AUTO-BOOT SETUP INSTRUCTIONS \u55357 ?\u57041 ?\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 To make this dashboard open automatically when Reaper starts:\par}
 {\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Open the Actions List in Reaper (shortcut: ?).\par}
 {\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab Search for "TLC Dashboard".\par}
