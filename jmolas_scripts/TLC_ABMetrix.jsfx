@@ -2,7 +2,7 @@ desc: TLC - A/B Metrix
 // @version 1.0
 // @author Jordi Molas - The Little Cavern Studio
 // @description A/B comparison utility for mixing and mastering.
-// @website https://github.com/tu-usuario-de-github/tu-repo
+// @website https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc
 // @about
 //   Simple A/B tool for REAPER. Compare your mix with a reference track, 
 //   match levels, and solo frequency bands to check your balance.
