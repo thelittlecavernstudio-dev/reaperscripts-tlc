@@ -1,0 +1,553 @@
+desc: TLC - A/B Metrix
+// @version 1.0
+// @author Jordi Molas - The Little Cavern Studio
+// @description A/B comparison utility for mixing and mastering.
+// @website https://github.com/tu-usuario-de-github/tu-repo
+// @about
+//   Simple A/B tool for REAPER. Compare your mix with a reference track, 
+//   match levels, and solo frequency bands to check your balance.
+//   Requires 4 channels on the Master Track (1/2 Mix, 3/4 Reference).
+// @license MIT
+
+/*
+  MIT License
+  Copyright (c) 2026 Jordi Molas - The Little Cavern Studio
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+*/
+
+options:gmem=TLCMetricReaper no_meter
+
+in_pin:left mix
+in_pin:right mix
+in_pin:left ref
+in_pin:right ref
+
+out_pin:left
+out_pin:right
+out_pin:unused
+out_pin:unused
+
+slider1:s_source=0<0,1,1>-Source Switch
+slider2:s_ref_gain=0<-24,24,0.1>-Gain Offset
+slider3:s_match_trig=0<0,1,1>-Match Trigger
+slider4:s_solo_band=-1<-1,5,1>-Solo Selector
+slider5:s_eq_compare=0<0,1,1>-EQ Compare
+slider6:s_lufs_trim=0<-3,3,0.1>-LUFS Trim (dB)
+slider7:s_lra_trim=0<-3,3,0.1>-LRA Trim (LU)
+slider8:s_reset_on_loop=0<0,1,1>-Reset on Loop
+
+slider10:f0s=20<20,100,1>-SUB_Start
+slider11:f0e=60<40,200,1>-SUB_End
+slider12:f1s=60<40,250,1>-LOW_Start
+slider13:f1e=250<200,600,1>-LOW_End
+slider14:f2s=250<200,600,1>-MLOW_Start
+slider15:f2e=500<400,1000,1>-MLOW_End
+slider16:f3s=500<400,1000,1>-MID_Start
+slider17:f3e=2000<1000,4000,1>-MID_End
+slider18:f4s=2000<1000,4000,1>-HMID_Start
+slider19:f4e=6000<4000,10000,1>-HMID_End
+slider20:f5s=6000<4000,10000,1>-HIGH_Start
+slider21:f5e=20000<10000,20000,1>-HIGH_End
+
+@init
+
+gfx_loadimg(1, "SKEUO docs/TLC_Brand_Transparent.png");
+
+function reset_mix_stats() (
+  m_sum_sq = 0; m_tp_sm = 0; m_tp_hold = 0; m_tp_num = 0; m_acc = 0;
+  m_mom_ms = 0; m_st_ms = 0; lufs_a_sum_m = 0; lufs_a_cnt_m = 0;
+  lra_a_sum_m = 0; lra_a_cnt_m = 0;
+  lra_disp_m = 0; lufs_s_disp_m = -100; lufs_i_disp_m = -100;
+  lufs_m_db_m = -100; lufs_i_db_m = -100; lra_db_diff_m = 0; 
+  win_cnt = 0; cur_buf = 0; s_cur_buf = 0;
+  lufs_m_sum_m = 0; lufs_s_sum_m = 0;
+  memset(lufs_a_hist_m,0,2*NUM_BINS); memset(lufs_b_hist_m,0,NUM_BINS);
+  memset(lufs_buf_m, 0, m_win_cnt); memset(lufs_buf2_m, 0, s_win_cnt);
+  memset(fft_mag_m,0,fft_bins);
+  m_f1p1_L = 0; m_f1p2_L = 0; m_f2p1_L = 0; m_f2p2_L = 0; m_f1p1_R = 0; m_f1p2_R = 0; m_f2p1_R = 0; m_f2p2_R = 0;
+);
+
+function reset_ref_stats() (
+  r_sum_sq = 0; r_tp_sm = 0; r_tp_hold = 0; r_tp_num = 0; r_acc = 0;
+  r_mom_ms = 0; r_st_ms = 0; lufs_a_sum_r = 0; lufs_a_cnt_r = 0;
+  lra_a_sum_r = 0; lra_a_cnt_r = 0;
+  lra_disp_r = 0; lufs_s_disp_r = -100; lufs_i_disp_r = -100;
+  lufs_m_db_r = -100; lufs_i_db_r = -100; lra_db_diff_r = 0; 
+  win_cnt = 0; cur_buf = 0; s_cur_buf = 0;
+  lufs_m_sum_r = 0; lufs_s_sum_r = 0;
+  memset(lufs_a_hist_r,0,2*NUM_BINS); memset(lufs_b_hist_r,0,NUM_BINS);
+  memset(lufs_buf_r, 0, m_win_cnt); memset(lufs_buf2_r, 0, s_win_cnt);
+  memset(fft_mag_r,0,fft_bins);
+  r_f1p1_L = 0; r_f1p2_L = 0; r_f2p1_L = 0; r_f2p2_L = 0; r_f1p1_R = 0; r_f1p2_R = 0; r_f2p1_R = 0; r_f2p2_R = 0;
+);
+
+is_init == 0 ? (
+  slider10=20; slider11=60; slider12=60; slider13=250;
+  slider14=250; slider15=500; slider16=500; slider17=2000;
+  slider18=2000; slider19=6000; slider20=6000; slider21=20000;
+  slider6=-0.5; show_guide = 0; x_blink_timer = 0; f_blink_timer = 0; a_blink_timer = 0;
+  match_delta = 0; match_str = #; strcpy(match_str, "0.0 dB (REF 0.0 dB)");
+  active_input = -1; str_buf = #;
+  reset_mix_stats(); reset_ref_stats(); // V8.5: Ensure 0% on load
+  is_init = 1;
+);
+
+db = 3.999843853973347; f0 = 1681.974450955533; Q = 0.7071752369554196; K = tan($pi*f0/srate);
+Vh = pow(10, db/20); Vb = pow(Vh, 0.4996667741545416); a0 = 1 + K/Q + K*K;
+f1a1 = 2*(K*K-1)/a0; f1a2 = (1-K/Q+K*K)/a0; f1b0 = (Vh+Vb*K/Q+K*K)/a0; f1b1 = 2*(K*K-Vh)/a0; f1b2 = (Vh-Vb*K/Q+K*K)/a0;
+f0 = 38.13547087602444; Q = 0.5003270373238773; K = tan($pi*f0/srate);
+f2a1 = 2*(K*K-1)/(1+K/Q+K*K); f2a2 = (1-K/Q+K*K)/(1+K/Q+K*K); f2b0 = 1; f2b1 = -2; f2b2 = 1;
+
+NUM_BINS = 1024; BINS_PER_DB = 10; DB_PER_BIN = 1/BINS_PER_DB;
+LOUD_METER_UPDATE = 0.1; 
+m_win_cnt = 0.4/LOUD_METER_UPDATE; 
+s_win_cnt = 3.0/LOUD_METER_UPDATE;
+lufs_gain = 1.1; WANT_INTEGRATED_ALWAYS = 0; 
+lufs_s_disp_alpha = 0.1; lufs_i_disp_alpha = 0.04; lra_disp_alpha = 0.08;
+
+mom_alpha = 1 - exp(-1/(srate*0.4)); st_alpha = 1 - exp(-1/(srate*3.0)); 
+meter_speed_down = exp(-1/(srate*0.8)); tp_num_decay = exp(-1/(srate*2.5));
+
+mem_ofs = 0;
+function alloc(sz) local(v) ( v = mem_ofs; mem_ofs += sz; memset(v,0,sz); v; );
+lufs_buf_m = alloc(m_win_cnt); lufs_buf2_m = alloc(s_win_cnt); lufs_a_hist_m = alloc(2*NUM_BINS); lufs_b_hist_m = alloc(NUM_BINS);
+lufs_buf_r = alloc(m_win_cnt); lufs_buf2_r = alloc(s_win_cnt); lufs_a_hist_r = alloc(2*NUM_BINS); lufs_b_hist_r = alloc(NUM_BINS);
+
+fft_size = 8192; fft_bins = fft_size/2;
+fft_mag_m = alloc(fft_bins); fft_mag_r = alloc(fft_bins);
+fft_time_m = alloc(fft_size); fft_time_r = alloc(fft_size);
+fft_buf_m = alloc(2*fft_size); fft_buf_r = alloc(2*fft_size);
+fft_win = alloc(fft_size);
+i = 0; loop(fft_size, fft_win[i] = 0.5 - 0.5*cos(2*$pi*i/(fft_size-1)); i += 1; );
+fft_pos = 0; hop_pos = 0; fft_ready = 0; fft_smooth = 0.75; fft_hop = 2048;
+
+function reset_match_logic() (
+  slider2 = 0; s_ref_gain = 0; match_active = 0; s_cnt = 0; match_delta = 0;
+);
+
+function clear_filter_buffers() (
+  m_f1p1_L = 0; m_f1p2_L = 0; m_f2p1_L = 0; m_f2p2_L = 0; m_f1p1_R = 0; m_f1p2_R = 0; m_f2p1_R = 0; m_f2p2_R = 0;
+  r_f1p1_L = 0; r_f1p2_L = 0; r_f2p1_L = 0; r_f2p2_L = 0; r_f1p1_R = 0; r_f1p2_R = 0; r_f2p1_R = 0; r_f2p2_R = 0;
+);
+
+function set_filter(freq, type) instance(b0, b1, b2, a1, a2) (
+  w0 = 2 * $pi * freq / srate; cw = cos(w0); sw = sin(w0); al = sw / 1.414; a0 = 1 + al;
+  type == 0 ? ( this.b0=((1+cw)/2)/a0; this.b1=-(1+cw)/a0; this.b2=((1+cw)/2)/a0; ) : ( this.b0=((1-cw)/2)/a0; this.b1=(1-cw)/a0; this.b2=((1-cw)/2)/a0; );
+  this.a1=(-2*cw)/a0; this.a2=(1-al)/a0;
+);
+
+function process_filter(in) instance(b0, b1, b2, a1, a2, x1, x2, y1, y2) (
+  out = this.b0*in + this.b1*this.x1 + this.b2*this.x2 - this.a1*this.y1 - this.a2*this.y2;
+  this.x2=this.x1; this.x1=in; this.y2=this.y1; this.y1=out; out;
+);
+
+last_play_state = 0; last_play_pos = 0;
+
+@sample
+in_m_L = spl0; in_m_R = spl1; in_r_L = spl2; in_r_R = spl3;
+gain_ref = 10^(s_ref_gain/20); in_r_L *= gain_ref; in_r_R *= gain_ref;
+
+is_jump = (play_state&1) && abs(play_position - last_play_pos) > 0.1;
+is_start = (play_state&1) && !(last_play_state&1);
+is_start ? clear_filter_buffers();
+
+last_play_state = play_state; last_play_pos = play_position + samplesblock/srate;
+
+m_tp_inst = max(abs(in_m_L), abs(in_m_R)); m_tp_inst > m_tp_hold ? m_tp_hold = m_tp_inst;
+r_tp_inst = max(abs(in_r_L), abs(in_r_R)); r_tp_inst > r_tp_hold ? r_tp_hold = r_tp_inst;
+
+// V8.5: Re-implemented decay on stop
+!(play_state&1) ? (
+  m_tp_sm *= 0.9; r_tp_sm *= 0.9;
+  m_tp_num *= 0.95; r_tp_num *= 0.95;
+) : (
+  m_tp_sm = m_tp_inst > m_tp_sm ? m_tp_inst : (m_tp_sm * meter_speed_down);
+  r_tp_sm = r_tp_inst > r_tp_sm ? r_tp_inst : (r_tp_sm * meter_speed_down);
+  m_tp_num = m_tp_inst > m_tp_num ? m_tp_inst : (m_tp_num * tp_num_decay);
+  r_tp_num = r_tp_inst > r_tp_num ? r_tp_inst : (r_tp_num * tp_num_decay);
+);
+
+// MIX Filters
+m_kL = in_m_L; f1p0 = m_kL - f1a1*m_f1p1_L - f1a2*m_f1p2_L; m_kL = f1b0*f1p0 + f1b1*m_f1p1_L + f1b2*m_f1p2_L; m_f1p2_L = m_f1p1_L; m_f1p1_L = f1p0;
+f2p0 = m_kL - f2a1*m_f2p1_L - f2a2*m_f2p2_L; m_kL = f2b0*f2p0 + f2b1*m_f2p1_L + f2b2*m_f2p2_L; m_f2p2_L = m_f2p1_L; m_f2p1_L = f2p0;
+m_kR = in_m_R; f1p0 = m_kR - f1a1*m_f1p1_R - f1a2*m_f1p2_R; m_kR = f1b0*f1p0 + f1b1*m_f1p1_R + f1b2*m_f1p2_R; m_f1p2_R = m_f1p1_R; m_f1p1_R = f1p0;
+f2p0 = m_kR - f2a1*m_f2p1_R - f2a2*m_f2p2_R; m_kR = f2b0*f2p0 + f2b1*m_f2p1_R + f2b2*m_f2p2_R; m_f2p2_R = m_f2p1_R; m_f2p1_R = f2p0;
+m_k_msq = (m_kL*m_kL + m_kR*m_kR) * (lufs_gain * 10^(s_lufs_trim/10)); 
+m_mom_ms += (m_k_msq - m_mom_ms) * mom_alpha; m_st_ms += (m_k_msq - m_st_ms) * st_alpha;
+
+// REF Filters
+r_kL = in_r_L; f1p0 = r_kL - f1a1*r_f1p1_L - f1a2*r_f1p2_L; r_kL = f1b0*f1p0 + f1b1*r_f1p1_L + f1b2*r_f1p2_L; r_f1p2_L = r_f1p1_L; r_f1p1_L = f1p0;
+f2p0 = r_kL - f2a1*r_f2p1_L - f2a2*r_f2p2_L; r_kL = f2b0*f2p0 + f2b1*r_f2p1_L + f2b2*r_f2p2_L; r_f2p2_L = r_f2p1_L; r_f2p1_L = f2p0;
+r_kR = in_r_R; f1p0 = r_kR - f1a1*r_f1p1_R - f1a2*r_f1p2_R; r_kR = f1b0*f1p0 + f1b1*r_f1p1_R + f1b2*r_f1p2_R; r_f1p2_R = r_f1p1_R; r_f1p1_R = f1p0;
+f2p0 = r_kR - f2a1*r_f2p1_R - f2a2*r_f2p2_R; r_kR = f2b0*f2p0 + f2b1*r_f2p1_R + f2b2*r_f2p2_R; r_f2p2_R = r_f2p1_R; r_f2p1_R = f2p0;
+r_k_msq = (r_kL*r_kL + r_kR*r_kR) * (lufs_gain * 10^(s_lufs_trim/10)); 
+r_mom_ms += (r_k_msq - r_mom_ms) * mom_alpha; r_st_ms += (r_k_msq - r_st_ms) * st_alpha;
+
+win_len = (LOUD_METER_UPDATE*srate)|0; 
+i_win_len = 1/(m_win_cnt*win_len);
+i_s_win_len = 1/(s_win_cnt*win_len);
+
+win_pos == 0 ? (lval_m = 0; lval_r = 0;); 
+lval_m += m_k_msq; lval_r += r_k_msq;
+
+(win_pos += 1) >= win_len ? (
+  win_pos = 0; win_cnt += 1;
+  
+  prev_lval = mem[lufs_buf_m + cur_buf]; mem[lufs_buf_m + cur_buf] = lval_m;
+  prev_lval_r = mem[lufs_buf_r + cur_buf]; mem[lufs_buf_r + cur_buf] = lval_r;
+  (cur_buf += 1) >= m_win_cnt ? cur_buf = 0;
+  lufs_m_sum_m += (lval_m - prev_lval) * i_win_len; 
+  lufs_m_sum_r += (lval_r - prev_lval_r) * i_win_len;
+  
+  s_prev_lval = mem[lufs_buf2_m + s_cur_buf]; mem[lufs_buf2_m + s_cur_buf] = lval_m;
+  s_prev_lval_r = mem[lufs_buf2_r + s_cur_buf]; mem[lufs_buf2_r + s_cur_buf] = lval_r;
+  (s_cur_buf += 1) >= s_win_cnt ? s_cur_buf = 0;
+  lufs_s_sum_m += (lval_m - s_prev_lval) * i_s_win_len;
+  lufs_s_sum_r += (lval_r - s_prev_lval_r) * i_s_win_len;
+
+  lufs_m_sum_m > 0 && win_cnt >= m_win_cnt ? (
+    lufs_m_db_m = -0.691 + log(lufs_m_sum_m) * 10/log(10);
+    a = (WANT_INTEGRATED_ALWAYS || (play_state&1)) ? ((lufs_m_db_m + 70) * BINS_PER_DB)|0 : -1;
+    a >= 0 && a < NUM_BINS ? (
+      lufs_a_sum_m += lufs_m_sum_m; lufs_a_cnt_m += 1;
+      lufs_a_hist_m[2*a] += 1; lufs_a_hist_m[2*a+1] += lufs_m_sum_m;
+      lufs_a_db = -0.691 + log(lufs_a_sum_m / lufs_a_cnt_m) * 10/log(10);
+      lufs_a_gate = ((lufs_a_db - 10 + 70) * BINS_PER_DB)|0;
+      lufs_i_sum = 0; lufs_i_cnt = 0; bin = max(lufs_a_gate, 0);
+      loop(NUM_BINS - bin, lufs_i_cnt += lufs_a_hist_m[2*bin]; lufs_i_sum += lufs_a_hist_m[2*bin+1]; bin += 1; );
+      lufs_i_db_m = lufs_i_sum > 0 ? -0.691 + log(lufs_i_sum / lufs_i_cnt) * 10/log(10) : -100;
+    );
+  );
+  
+  lufs_m_sum_r > 0 && win_cnt >= m_win_cnt ? (
+    lufs_m_db_r = -0.691 + log(lufs_m_sum_r) * 10/log(10);
+    a = (WANT_INTEGRATED_ALWAYS || (play_state&1)) ? ((lufs_m_db_r + 70) * BINS_PER_DB)|0 : -1;
+    a >= 0 && a < NUM_BINS ? (
+      lufs_a_sum_r += lufs_m_sum_r; lufs_a_cnt_r += 1;
+      lufs_a_hist_r[2*a] += 1; lufs_a_hist_r[2*a+1] += lufs_m_sum_r;
+      lufs_a_db_r = -0.691 + log(lufs_a_sum_r / lufs_a_cnt_r) * 10/log(10);
+      lufs_a_gate_r = ((lufs_a_db_r - 10 + 70) * BINS_PER_DB)|0;
+      lufs_i_sum_r = 0; lufs_i_cnt_r = 0; bin = max(lufs_a_gate_r, 0);
+      loop(NUM_BINS - bin, lufs_i_cnt_r += lufs_a_hist_r[2*bin]; lufs_i_sum_r += lufs_a_hist_r[2*bin+1]; bin += 1; );
+      lufs_i_db_r = lufs_i_sum_r > 0 ? -0.691 + log(lufs_i_sum_r / lufs_i_cnt_r) * 10/log(10) : -100;
+    );
+  );
+
+  lufs_s_sum_m > 0 && win_cnt >= s_win_cnt ? (
+    lufs_s_db_m = -0.691 + log(lufs_s_sum_m) * 10/log(10);
+    sa = (play_state&1) ? ((lufs_s_db_m + 70) * BINS_PER_DB)|0 : -1;
+    sa >= 0 && sa < NUM_BINS ? (
+      lufs_b_hist_m[sa] += 1;
+      lra_a_sum_m += lufs_s_sum_m; lra_a_cnt_m += 1;
+      lra_a_db = -0.691 + log(lra_a_sum_m / lra_a_cnt_m) * 10/log(10);
+      lra_total_cnt = 0; bin = 0; loop(NUM_BINS, lra_total_cnt += lufs_b_hist_m[bin]; bin += 1; );
+      lra_total_cnt >= 20 ? (
+        lra_gate = ((lra_a_db - 20 + 70) * BINS_PER_DB)|0;
+        lra_cnt = 0; bin = max(lra_gate, 0); loop(NUM_BINS - bin, lra_cnt += lufs_b_hist_m[bin]; bin += 1; );
+        lra_cnt >= 20 ? (
+          lra_lo_cnt = 0; bin = max(lra_gate, 0); while(bin < NUM_BINS && lra_lo_cnt < lra_cnt * 0.1) ( lra_lo_cnt += lufs_b_hist_m[bin]; bin += 1; );
+          bin_lo = bin - 1;
+          lra_hi_cnt = 0; bin = NUM_BINS - 1; while(bin >= max(lra_gate, 0) && lra_hi_cnt < lra_cnt * 0.05) ( lra_hi_cnt += lufs_b_hist_m[bin]; bin -= 1; );
+          bin_hi = bin + 1;
+          lra_db_diff_m = (bin_hi - bin_lo) * DB_PER_BIN;
+          lra_disp_m += (lra_db_diff_m + s_lra_trim - lra_disp_m) * lra_disp_alpha;
+        );
+      );
+    );
+  );
+
+  lufs_s_sum_r > 0 && win_cnt >= s_win_cnt ? (
+    lufs_s_db_r = -0.691 + log(lufs_s_sum_r) * 10/log(10);
+    sa_r = (play_state&1) ? ((lufs_s_db_r + 70) * BINS_PER_DB)|0 : -1;
+    sa_r >= 0 && sa_r < NUM_BINS ? (
+      lufs_b_hist_r[sa_r] += 1;
+      lra_a_sum_r += lufs_s_sum_r; lra_a_cnt_r += 1;
+      lra_a_db_r = -0.691 + log(lra_a_sum_r / lra_a_cnt_r) * 10/log(10);
+      lra_total_cnt_r = 0; bin = 0; loop(NUM_BINS, lra_total_cnt_r += lufs_b_hist_r[bin]; bin += 1; );
+      lra_total_cnt_r >= 20 ? (
+        lra_gate_r = ((lra_a_db_r - 20 + 70) * BINS_PER_DB)|0;
+        lra_cnt_r = 0; bin = max(lra_gate_r, 0); loop(NUM_BINS - bin, lra_cnt_r += lufs_b_hist_r[bin]; bin += 1; );
+        lra_cnt_r >= 20 ? (
+          lra_lo_cnt_r = 0; bin = max(lra_gate_r, 0); while(bin < NUM_BINS && lra_lo_cnt_r < lra_cnt_r * 0.1) ( lra_lo_cnt_r += lufs_b_hist_r[bin]; bin += 1; );
+          bin_lo_r = bin - 1;
+          lra_hi_cnt_r = 0; bin = NUM_BINS - 1; while(bin >= max(lra_gate_r, 0) && lra_hi_cnt_r < lra_cnt_r * 0.05) ( lra_hi_cnt_r += lufs_b_hist_r[bin]; bin -= 1; );
+          bin_hi_r = bin + 1;
+          lra_db_diff_r = (bin_hi_r - bin_lo_r) * DB_PER_BIN;
+          lra_disp_r += (lra_db_diff_r + s_lra_trim - lra_disp_r) * lra_disp_alpha;
+        );
+      );
+    );
+  );
+
+  // V8.5: Decay logic for visualization variables
+  !(play_state&1) ? (
+    lufs_s_disp_m -= 1.5; lufs_s_disp_m < -100 ? lufs_s_disp_m = -100;
+    lufs_i_disp_m -= 1.0; lufs_i_disp_m < -100 ? lufs_i_disp_m = -100;
+    lra_disp_m *= 0.9; lra_disp_m < 0.1 ? lra_disp_m = 0;
+    lufs_s_disp_r -= 1.5; lufs_s_disp_r < -100 ? lufs_s_disp_r = -100;
+    lufs_i_disp_r -= 1.0; lufs_i_disp_r < -100 ? lufs_i_disp_r = -100;
+    lra_disp_r *= 0.9; lra_disp_r < 0.1 ? lra_disp_r = 0;
+  ) : (
+    lufs_s_disp_m += (lufs_m_db_m - lufs_s_disp_m) * lufs_s_disp_alpha;
+    lufs_i_disp_m += (lufs_i_db_m - lufs_i_disp_m) * lufs_i_disp_alpha;
+    lufs_s_disp_r += (lufs_m_db_r - lufs_s_disp_r) * lufs_s_disp_alpha;
+    lufs_i_disp_r += (lufs_i_db_r - lufs_i_disp_r) * lufs_i_disp_alpha;
+  );
+);
+
+mix_mono = 0.5 * (in_m_L + in_m_R); ref_mono = 0.5 * (in_r_L + in_r_R);
+mem[fft_time_m + fft_pos] = mix_mono; mem[fft_time_r + fft_pos] = ref_mono;
+(fft_pos += 1) >= fft_size ? fft_pos = 0;
+(hop_pos += 1) >= fft_hop ? (
+  hop_pos = 0; i = 0;
+  loop(fft_size,
+    v = mem[fft_time_m + i] * mem[fft_win + i]; mem[fft_buf_m + 2*i] = v; mem[fft_buf_m + 2*i + 1] = 0;
+    v2 = mem[fft_time_r + i] * mem[fft_win + i]; mem[fft_buf_r + 2*i] = v2; mem[fft_buf_r + 2*i + 1] = 0;
+    i += 1;
+  );
+  fft_permute(fft_buf_m, fft_size); fft(fft_buf_m, fft_size);
+  fft_permute(fft_buf_r, fft_size); fft(fft_buf_r, fft_size);
+  i = 0; loop(fft_bins,
+    re = mem[fft_buf_m + 2*i]; im = mem[fft_buf_m + 2*i + 1]; mem[fft_mag_m + i] = mem[fft_mag_m + i]*fft_smooth + sqrt(re*re+im*im)*(1-fft_smooth);
+    re = mem[fft_buf_r + 2*i]; im = mem[fft_buf_r + 2*i + 1]; mem[fft_mag_r + i] = mem[fft_mag_r + i]*fft_smooth + sqrt(re*re+im*im)*(1-fft_smooth);
+    i += 1;
+  );
+  fft_ready = 1;
+);
+
+s_match_trig ? (
+  !match_active ? (m_acc = 0; r_acc = 0; s_cnt = 0; match_active = 1;);
+  m_acc += (in_m_L*in_m_L + in_m_R*in_m_R); r_acc += (in_r_L*in_r_L + in_r_R*in_r_R);
+  (s_cnt += 1) >= srate * 3 ? (
+    m_lufs_val = lufs_i_db_m > -90 ? lufs_i_db_m : (lufs_s_db_m > -90 ? lufs_s_db_m : (20 * log10(sqrt(m_acc/s_cnt) + 0.000001)));
+    r_lufs_val = lufs_i_db_r > -90 ? lufs_i_db_r : (lufs_s_db_r > -90 ? lufs_s_db_r : (20 * log10(sqrt(r_acc/s_cnt) + 0.000001)));
+    match_delta = m_lufs_val - r_lufs_val; s_ref_gain += match_delta;
+    s_match_trig = 0; s_cnt = 0; m_acc = 0; r_acc = 0; match_active = 0;
+  );
+);
+
+out_L = (s_source == 0) ? in_m_L : in_r_L; out_R = (s_source == 0) ? in_m_R : in_r_R;
+s_solo_band != -1 ? (
+  fS = (s_solo_band == 0 ? slider10 : s_solo_band == 1 ? slider12 : s_solo_band == 2 ? slider14 : s_solo_band == 3 ? slider16 : s_solo_band == 4 ? slider18 : slider20);
+  fE = (s_solo_band == 0 ? slider11 : s_solo_band == 1 ? slider13 : s_solo_band == 2 ? slider15 : s_solo_band == 3 ? slider17 : s_solo_band == 4 ? slider19 : slider21);
+  hpL.set_filter(fS, 0); hpR.set_filter(fS, 0); lpL.set_filter(fE, 1); lpR.set_filter(fE, 1);
+  out_L = lpL.process_filter(hpL.process_filter(out_L)); out_R = lpR.process_filter(hpR.process_filter(out_R));
+);
+spl0 = out_L; spl1 = out_R; spl2 = 0; spl3 = 0;
+
+@gfx 1140 650
+
+function draw_3d_panel(x, y, w, h, r, g, b, bevel) (
+  gfx_set(r, g, b, 1); gfx_rect(x, y, w, h);
+  gfx_set(1, 1, 1, 0.1); gfx_rect(x, y, w, bevel); gfx_rect(x, y, bevel, h);
+  gfx_set(0, 0, 0, 0.4); gfx_rect(x, y+h-bevel, w, bevel); gfx_rect(x+w-bevel, y, bevel, h);
+);
+
+function draw_btn(x, y, w, h, active, label, r, g, b, tr, tg, tb) local(is_down, lw, lh) (
+  is_down = (mouse_cap & 1 && mouse_x >= x && mouse_x <= x+w && mouse_y >= y && mouse_y <= y+h);
+  active ? draw_3d_panel(x, y, w, h, r, g, b, 2) : draw_3d_panel(x, y, w, h, 0.2, 0.2, 0.2, 2);
+  is_down ? ( gfx_set(0,0,0,0.2); gfx_rect(x,y,w,h); );
+  gfx_set(tr, tg, tb, 1); gfx_setfont(1, "Arial", 16, "b");
+  gfx_measurestr(label, lw, lh);
+  gfx_x = x + (w-lw)/2 + (is_down?1:0); gfx_y = y + (h-lh)/2 + (is_down?1:0); gfx_drawstr(label);
+  (mouse_cap & 1 && !last_cap && is_down);
+);
+
+function draw_led_bar(x, y, w, h, val, min_v, max_v, r, g, b) local(pct, segs, i, seg_h, gap) (
+  draw_3d_panel(x, y, w, h, 0.05, 0.05, 0.05, 1);
+  pct = (val - min_v) / (max_v - min_v); pct = max(0, min(1, pct));
+  segs = floor(h / 6); seg_h = 4; gap = 2;
+  i = 0; loop(segs,
+    cur_pct = i / segs; cur_pct <= pct ? gfx_set(r, g, b, 0.9) : gfx_set(r, g, b, 0.1);
+    gfx_rect(x + 2, y + h - (i+1)*(seg_h+gap), w - 4, seg_h); i += 1;
+  );
+);
+
+function draw_analytics_panel(x, y, pw, ph, title, tp_curr, tp_num, lufs_s, lufs_i, lra, tp_hold, is_ref) local(mx, my, mw, mh, tw, th, gap, s_tp, s_s, s_i, s_lra, s_hold) (
+  draw_3d_panel(x, y, pw, ph, 0.12, 0.12, 0.12, 3);
+  !show_guide && mouse_cap & 1 && !last_cap && mouse_x >= x && mouse_x <= x+pw && mouse_y >= y && mouse_y <= y+ph ? (
+    is_ref ? reset_ref_stats() : reset_mix_stats();
+  );
+  gfx_set(1, 1, 1, 1); gfx_setfont(1, "Arial", 18, "b"); gfx_x = x + 10; gfx_y = y + 10; gfx_drawstr(title);
+  mx = x + 15; my = y + 70; mw = 34; mh = ph - 125; gap = 42;
+  gfx_setfont(1, "Arial", 14, "b"); gfx_set(0.4, 1, 0.4, 1);
+  s_tp = sprintf(#, "%.1f", 20*log10(tp_num+0.000001)); gfx_measurestr(s_tp, tw, th); gfx_x = mx + (mw-tw)/2; gfx_y = my - 25; gfx_drawstr(s_tp);
+  s_s = sprintf(#, "%.1f", lufs_s); gfx_measurestr(s_s, tw, th); gfx_x = mx + gap + (mw-tw)/2; gfx_drawstr(s_s);
+  s_i = sprintf(#, "%.1f", lufs_i); gfx_measurestr(s_i, tw, th); gfx_x = mx + gap*2 + (mw-tw)/2; gfx_drawstr(s_i);
+  s_lra = sprintf(#, "%.1f", lra); gfx_measurestr(s_lra, tw, th); gfx_x = mx + gap*3 + (mw-tw)/2; gfx_drawstr(s_lra);
+  draw_led_bar(mx, my, mw, mh, 20*log10(tp_curr+0.000001), -60, 0, 0.2, 1, 0.2);
+  draw_led_bar(mx + gap, my, mw, mh, lufs_s, -60, 0, 0.2, 0.7, 1);
+  draw_led_bar(mx + gap*2, my, mw, mh, lufs_i, -60, 0, 0.1, 0.5, 0.9);
+  draw_led_bar(mx + gap*3, my, mw, mh, lra, 0, 20, 0.8, 0.2, 0.8);
+  gfx_setfont(1, "Arial", 15, "b"); gfx_set(0.8, 0.8, 0.8, 1);
+  gfx_measurestr("dBTP", tw, th); gfx_x = mx + (mw-tw)/2; gfx_y = my + mh + 10; gfx_drawstr("dBTP");
+  s_hold = sprintf(#, "%.1f", 20*log10(tp_hold+0.000001));
+  gfx_setfont(1, "Arial", 14, "b"); gfx_set(0.85, 0.85, 0.85, 1);
+  gfx_measurestr(s_hold, tw, th); gfx_x = mx + (mw-tw)/2; gfx_y = my + mh + 28; gfx_drawstr(s_hold);
+  gfx_setfont(1, "Arial", 15, "b"); gfx_set(0.8, 0.8, 0.8, 1);
+  gfx_measurestr("LUF-S", tw, th); gfx_x = mx + gap + (mw-tw)/2; gfx_y = my + mh + 10; gfx_drawstr("LUF-S");
+  gfx_measurestr("LUF-I", tw, th); gfx_x = mx + gap*2 + (mw-tw)/2; gfx_y = my + mh + 10; gfx_drawstr("LUF-I");
+  gfx_measurestr("LRA", tw, th); gfx_x = mx + gap*3 + (mw-tw)/2; gfx_y = my + mh + 10; gfx_drawstr("LRA");
+);
+
+function draw_input_sm(x, y, w, h, val, id, soloed) (
+  soloed ? draw_3d_panel(x, y, w, h, 0.15, 0.35, 0.15, 1) : draw_3d_panel(x, y, w, h, 0.15, 0.15, 0.15, 1);
+  !show_guide && active_input == id ? ( gfx_set(1, 0.8, 0.3, 0.2); gfx_rect(x, y, w, h); );
+  gfx_set(1, 0.85, 0.4, 1); gfx_setfont(1, "Arial", 16, "b");
+  s_dis = (active_input == id ? str_buf : sprintf(#, "%d", val)); gfx_measurestr(s_dis, tw, th);
+  gfx_x = x + (w-tw)/2; gfx_y = y + (h-th)/2; gfx_drawstr(s_dis);
+  !show_guide && mouse_cap & 1 && !last_cap && mouse_x >= x && mouse_x <= x+w && mouse_y >= y && mouse_y <= y+h ? ( active_input = id; strcpy(str_buf, sprintf(#, "%d", val)); sel_all = 1; );
+);
+
+function draw_skeuo_eq_row_sm(id, label, fs, fe, x, y) local(bw, bh, f1w, f2w, tw, th, is_act) (
+  is_act = (s_solo_band == id); bw = 75; bh = 35;
+  (!show_guide && draw_btn(x, y, bw, bh, is_act, label, 0.15, 0.35, 0.15, 1, 1, 1)) ? s_solo_band = (is_act ? -1 : id);
+  f1w = 55; draw_input_sm(x + bw + 5, y, f1w, bh, fs, id*2, is_act);
+  gfx_set(0.6, 0.6, 0.6, 1); gfx_setfont(1, "Arial", 10); gfx_x = x + bw + 5 + f1w + 2; gfx_y = y + 10; gfx_drawstr("-");
+  f2w = 55; draw_input_sm(gfx_x + 8, y, f2w, bh, fe, id*2+1, is_act);
+);
+
+function freq_to_gx(f) ( f=max(20,min(20000,f)); l=log(f/20)/log(1000); (gx+2) + l*(gw-4); );
+function db_to_gy(db) ( db=max(-90,min(0,db)); (gy+2) + (0-db)/90 * (gh-4); );
+function draw_f_lab(f, x, y) (
+  gfx_x = x; gfx_y = y; f >= 1000 ? ( (f % 1000) == 0 ? gfx_drawstr(sprintf(#, "%dk", f/1000)) : gfx_drawstr(sprintf(#, "%.1fk", f/1000)); ) : gfx_drawstr(sprintf(#, "%d", f));
+);
+
+function draw_eq_axes(gx, gy, gw, gh) (
+  draw_3d_panel(gx, gy, gw, gh, 0.1, 0.1, 0.1, 2); gfx_set(0.15, 0.15, 0.15, 1); gfx_rect(gx+2, gy+2, gw-4, gh-4);
+  gfx_setfont(1, "Arial", 14, "b"); v_off = 10;
+  gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider10); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider10, xx - 10, gy + gh + v_off);
+  gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider11); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider11, xx - 12, gy + gh + v_off);
+  slider12 != slider11 ? ( gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider12); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider12, xx - 12, gy + gh + v_off); );
+  gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider13); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider13, xx - 14, gy + gh + v_off);
+  slider14 != slider13 ? ( gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider14); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider14, xx - 12, gy + gh + v_off); );
+  gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider15); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider15, xx - 14, gy + gh + v_off);
+  slider16 != slider15 ? ( gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider16); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider16, xx - 12, gy + gh + v_off); );
+  gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider17); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider17, xx - 12, gy + gh + v_off);
+  slider18 != slider17 ? ( gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider18); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider18, xx - 12, gy + gh + v_off); );
+  gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider19); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider19, xx - 12, gy + gh + v_off);
+  slider20 != slider19 ? ( gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider20); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider20, xx - 12, gy + gh + v_off); );
+  gfx_set(1, 1, 1, 0.1); xx = freq_to_gx(slider21); gfx_line(xx, gy+2, xx, gy+gh-2); gfx_set(1, 1, 1, 1); draw_f_lab(slider21, xx - 14, gy + gh + v_off);
+  gfx_set(1, 1, 1, 0.05); i = 1; loop(5, yy = gy + 2 + i*(gh-4)/6; gfx_line(gx+2, yy, gx+gw-2, yy); i+=1; );
+  gfx_set(1, 0.2, 0.2, 0.8); yy = gy + gh*0.5; xx = gx + 2; while (xx < gx + gw - 2) ( gfx_line(xx, yy, min(xx+6, gx+gw-2), yy); xx += 12; );
+);
+
+function draw_fft_curve(mag_base, r, g, b, norm, fS, fE) local(i, f, x, y, prev_x, prev_y, mag, db, sum, cnt, w, j, mag_avg, tilt_db, alpha) (
+    prev_x = -1; i = 3; while(i < fft_bins - 20) (
+      f = i * srate / fft_size; (f >= 20 && f <= 20000) ? (
+        w = 2 + floor(i/120); w > 20 ? w = 20; sum = 0; cnt = 0; j = -w; loop(w*2+1, sum += mem[mag_base + i + j]; cnt += 1; j += 1; );
+        mag_avg = sum / cnt; db = 20*log10(mag_avg/norm + 0.000000001); tilt_db = 3 * (log(f/1000)/log(2)); db += tilt_db;
+        alpha = 1.0; s_solo_band != -1 ? ( (f < fS || f > fE) ? alpha = 0.15; ); gfx_set(r, g, b, alpha);
+        x = freq_to_gx(f); y = db_to_gy(db); x >= gx && x <= gx+gw && y >= gy && y <= gy+gh ? ( prev_x < 0 ? (prev_x=x; prev_y=y;) : (gfx_line(prev_x, prev_y, x, y); prev_x=x; prev_y=y;); ) : (prev_x = -1;);
+      ); i += 1;
+    );
+);
+
+bg_v = 100/255; gfx_clear = bg_v*255 + bg_v*255*256 + bg_v*255*65536; c_key = gfx_getchar();
+
+// --- HEADER ---
+draw_3d_panel(0, 0, gfx_w, 100, 0.15, 0.15, 0.15, 2);
+mx = 20; my = 32;
+s_source == 0 ? ( br=0.2; bg=0.8; bb=1; tr=0; tg=0; tb=0; ) : ( br=1; bg=0.4; bb=0.2; tr=1; tg=1; tb=1; );
+(!show_guide && draw_btn(mx, my, 140, 35, 1, s_source ? "SOURCE: REF" : "SOURCE: MIX", br, bg, bb, tr, tg, tb)) ? s_source = 1 - s_source;
+(!show_guide && draw_btn(mx + 150, my, 80, 35, s_match_trig, "MATCH", 0.8, 0.3, 0.1, 1, 1, 1)) ? s_match_trig = 1;
+x_blink_timer > 0 ? ( bx_r = 1; bx_g = 0.4; bx_b = 0.4; x_blink_timer -= 1; ) : ( bx_r = 0.8; bx_g = 0; bx_b = 0; );
+(!show_guide && draw_btn(mx + 240, my, 30, 35, 1, "X", bx_r, bx_g, bx_b, 1, 1, 1)) ? ( 
+  reset_ref_stats(); 
+  reset_match_logic();
+  x_blink_timer = 10; 
+);
+(!show_guide && draw_btn(mx + 300, my, 130, 35, 0, "SETUP GUIDE", 0.3, 0.3, 0.3, 1, 1, 1)) ? show_guide = 1;
+gfx_x = mx + 150; gfx_y = my + 42; gfx_set(1, 1, 1, 1); gfx_setfont(1, "Arial", 14); 
+s_ref_gain != 0 ? (
+  sprintf(match_str, "REF %.1f dB  (DELTA %.1f dB)", s_ref_gain, match_delta);
+) : (
+  strcpy(match_str, "0.0 dB (REF 0.0 dB)");
+);
+gfx_drawstr(match_str);
+gfx_setfont(1, "Arial", 24, "b"); gfx_measurestr("A/B Metrics", tw, th);
+tx = gfx_w - tw - 20; ty = (100 - th) / 2; gfx_x = tx; gfx_y = ty; gfx_set(1, 1, 1, 1); gfx_drawstr("A/B Metrics");
+gfx_getimgdim(1, img_w, img_h); img_w > 0 && img_h > 0 ? ( asp = img_w / img_h; dh = 45; dw = dh * asp; gfx_blit(1, 1, 0, 0, 0, img_w, img_h, gfx_w - dw - 15, (100 - dh) / 2, dw, dh); );
+
+// --- UPPER BLOCK ---
+fy = 125; f_step_x = 225; f_step_y = 40; 
+draw_skeuo_eq_row_sm(0, "SUB", slider10, slider11, 20, fy);
+draw_skeuo_eq_row_sm(1, "LOW", slider12, slider13, 20 + f_step_x, fy);
+draw_skeuo_eq_row_sm(2, "M-LOW", slider14, slider15, 20 + f_step_x*2, fy);
+draw_skeuo_eq_row_sm(3, "MID", slider16, slider17, 20, fy + f_step_y);
+draw_skeuo_eq_row_sm(4, "H-MID", slider18, slider19, 20 + f_step_x, fy + f_step_y);
+draw_skeuo_eq_row_sm(5, "HIGHS", slider20, slider21, 20 + f_step_x*2, fy + f_step_y);
+
+// --- ANALYTICS ---
+rx = 730; ry = 125; apw = 190; aph = 440;
+draw_analytics_panel(rx, ry, apw, aph, "MIX ANALYTICS", m_tp_sm, m_tp_num, lufs_s_disp_m, lufs_i_disp_m, lra_disp_m, m_tp_hold, 0);
+draw_analytics_panel(rx + apw + 10, ry, apw, aph, "REF ANALYTICS", r_tp_sm, r_tp_num, lufs_s_disp_r, lufs_i_disp_r, lra_disp_r, r_tp_hold, 1);
+
+// --- EQ GRAPH ---
+gx = 20; gy = 220; gw = 685; gh = 345;
+draw_eq_axes(gx, gy, gw, gh);
+fS = -1; fE = -1; s_solo_band != -1 ? (
+  fS = (s_solo_band == 0 ? slider10 : s_solo_band == 1 ? slider12 : s_solo_band == 2 ? slider14 : s_solo_band == 3 ? slider16 : s_solo_band == 4 ? slider18 : slider20);
+  fE = (s_solo_band == 0 ? slider11 : s_solo_band == 1 ? slider13 : s_solo_band == 2 ? slider15 : s_solo_band == 3 ? slider17 : s_solo_band == 4 ? slider19 : slider21);
+  xS = max(gx+2, freq_to_gx(fS)); xE = min(gx + gw - 2, freq_to_gx(fE)); gfx_set(1, 0.5, 0, 0.1); gfx_rect(xS, gy+2, xE - xS, gh-4);
+);
+fft_ready ? (
+  norm = fft_size * 0.5; s_eq_compare ? ( draw_fft_curve(fft_mag_m, 0.2, 0.8, 1, norm, fS, fE); draw_fft_curve(fft_mag_r, 1, 0.4, 0.2, norm, fS, fE); ) : ( s_source == 0 ? draw_fft_curve(fft_mag_m, 0.2, 0.8, 1, norm, fS, fE) : draw_fft_curve(fft_mag_r, 1, 0.4, 0.2, norm, fS, fE); );
+  lx_leg = gx + gw - 65; ly_leg = gy + 10;
+  gfx_setfont(1, "Arial", 12, "b");
+  gfx_set(0.2, 0.8, 1, 1); gfx_rect(lx_leg, ly_leg+5, 10, 2); gfx_x = lx_leg + 15; gfx_y = ly_leg; gfx_drawstr("MIX");
+  ly_leg += 15; gfx_set(1, 0.4, 0.2, 1); gfx_rect(lx_leg, ly_leg+5, 10, 2); gfx_x = lx_leg + 15; gfx_y = ly_leg; gfx_drawstr("REF");
+);
+
+// --- BUTTONS ---
+btn_y = 600;
+f_blink_timer > 0 ? ( bf_r = 1; bf_g = 0.4; bf_b = 0.4; f_blink_timer -= 1; ) : ( bf_r = 0.8; bf_g = 0.1; bf_b = 0.1; );
+(!show_guide && draw_btn(20, btn_y, 200, 30, 1, "RESET FREQUENCIES", bf_r, bf_g, bf_b, 1, 1, 1)) ? ( slider10=20; slider11=60; slider12=60; slider13=250; slider14=250; slider15=500; slider16=500; slider17=2000; slider18=2000; slider19=6000; slider20=6000; slider21=20000; f_blink_timer = 10; );
+s_eq_compare ? ( bc_r=0.1; bc_g=0.6; bc_b=0.1; ) : ( bc_r=0.8; bc_g=0.1; bc_b=0.1; );
+(!show_guide && draw_btn(gx + (gw-120)/2, btn_y, 120, 30, 1, "COMPARE EQ", bc_r, bc_g, bc_b, 1, 1, 1)) ? s_eq_compare = 1 - s_eq_compare;
+a_blink_timer > 0 ? ( ba_r = 0.4; ba_g = 0.4; ba_b = 0.4; a_blink_timer -= 1; ) : ( ba_r = 0.8; ba_g = 0.1; ba_b = 0.1; );
+(!show_guide && draw_btn(rx + 115, btn_y, 160, 30, 1, "RESET ANALYTICS", ba_r, ba_g, ba_b, 1, 1, 1)) ? ( reset_mix_stats(); reset_ref_stats(); a_blink_timer = 10; );
+
+// Guide Overlay
+show_guide ? (
+  gfx_set(0, 0, 0, 0.85); gfx_rect(0, 0, gfx_w, gfx_h); gw_ov = 650; gh_ov = 450; gx_p = (gfx_w - gw_ov)/2; gy_p = (gfx_h - gh_ov)/2;
+  draw_3d_panel(gx_p, gy_p, gw_ov, gh_ov, 0.12, 0.12, 0.12, 5);
+  gfx_set(1, 1, 1, 1); gfx_setfont(1, "Arial", 22, "b"); t_str = "INSTRUCTIONS FOR A/B ROUTING"; gfx_measurestr(t_str, tw, th); gfx_x = gx_p + (gw_ov-tw)/2; gfx_y = gy_p + 35; gfx_drawstr(t_str);
+  gfx_set(1, 0.5, 0, 0.8); gfx_rect(gx_p + 50, gfx_y + th + 10, gw_ov - 100, 2);
+  gfx_set(1, 1, 1, 1); ly_ov = gy_p + 100; 
+  gfx_setfont(1, "Arial", 18, "i"); gfx_x = gx_p + 50; gfx_y = ly_ov; gfx_drawstr("Suggested setup order:"); ly_ov += 45;
+  gfx_setfont(1, "Arial", 20, "b"); gfx_x = gx_p + 50; gfx_y = ly_ov; gfx_drawstr("1. Configure the Master Track"); ly_ov += 40;
+  gfx_setfont(1, "Arial", 18); gfx_x = gx_p + 70; gfx_y = ly_ov; gfx_drawstr("- On the Master Track, set \"Track channels\" to 4."); ly_ov += 55;
+  gfx_setfont(1, "Arial", 20, "b"); gfx_x = gx_p + 50; gfx_y = ly_ov; gfx_drawstr("2. Create a Reference Track (REF)"); ly_ov += 40;
+  gfx_setfont(1, "Arial", 18); gfx_x = gx_p + 70; gfx_y = ly_ov; gfx_drawstr("- On that track, verify \"Master send\" is checked."); ly_ov += 32;
+  gfx_x = gx_p + 70; gfx_y = ly_ov; gfx_drawstr("- Set \"Master send channels from/to:\" from All to 3-4."); ly_ov += 32;
+  gfx_x = gx_p + 70; gfx_y = ly_ov; gfx_drawstr("- Select \"Add new hardware output...\" and set it to 3/4.");
+  
+  gfx_set(0.7, 0.7, 0.7, 1); gfx_setfont(1, "Arial", 16, "i");
+  sig_str = "Developed by The Little Cavern & Jordi MolasTLC || thelittlecavernstudio@gmail.com || 03/2026";
+  gfx_measurestr(sig_str, tw, th); gfx_x = gx_p + (gw_ov - tw) / 2; gfx_y = gy_p + gh_ov - 40; gfx_drawstr(sig_str);
+
+  draw_btn(gx_p + gw_ov - 45, gy_p + 15, 30, 30, 0, "X", 0.8, 0.1, 0.1, 1, 1, 1) ? show_guide = 0;
+);
+
+// Input handling
+!show_guide && c_key > 0 ? (
+  active_input != -1 ? (
+    c_key == 13 ? (
+      match("%d", str_buf, v_res);
+      active_input==0?slider10=v_res : active_input==1?slider11=v_res : active_input==2?slider12=v_res : active_input==3?slider13=v_res : active_input==4?slider14=v_res : active_input==5?slider15=v_res : 
+      active_input==6?slider16=v_res : active_input==7?slider17=v_res : active_input==8?slider18=v_res : active_input==9?slider19=v_res : active_input==10?slider20=v_res : active_input==11?slider21=v_res;
+      active_input = -1;
+    ) : c_key == 8 ? ( str_setlen(str_buf, max(0, strlen(str_buf)-1)); ) : c_key >= 48 && c_key <= 57 ? ( sel_all ? (strcpy(str_buf, ""); sel_all = 0;); sprintf(str_buf, "%s%c", str_buf, c_key); );
+  );
+);
+last_cap = mouse_cap;

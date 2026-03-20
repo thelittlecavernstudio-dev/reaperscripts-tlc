@@ -10,6 +10,9 @@ This collection features custom-engineered tools designed to streamline **REAPER
 
 ## 🛠 Included Scripts:
 
+### 🖖 Simple A/B tool for REAPER. Compare your mix with a reference track
+This tool is a humble option to ADPTR AB Metric: match levels, and solo frequency bands to check your balance. Requires 4 channels on the Master Track (1/2 Mix, 3/4 Reference).
+
 ### 🚀 Dynamic Session Launcher (`TLC_Dashboard.lua`)
 The heart of the workflow. A visual dashboard that triggers upon REAPER launch, allowing you to choose session types or open recent projects instantly.
 It is very important read About section to learn how configure the startup screen.
