@@ -1,5 +1,6 @@
 -- @description TLC Locate True Peaks
--- @version 1.0.1
+-- @version 1.0
+-- @provides [main] . > The Little Cavern Scripts/TLC Locate True Peaks.lua
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about I use this script post-mixbus bounce to catch any stray peaks. It's also my go-to for finding the absolute highest dBTP on individual tracks like snare or bass. Very handy for gain staging.
 -- This script surgically analyzes your audio items to find the highest pressure points, accounting for REAPER’s internal item gain staging—including Item Volume, Take Volume, and Take Envelopes.

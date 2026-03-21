@@ -1,0 +1,21 @@
+# Copias de Seguridad y Archivo (Protocolo OLD)
+*.bak
+*.old
+*_OLD_v*.*
+OLD/
+**/OLD/
+
+# Temporales de REAPER
+*.reapeaks
+*.reapindex
+*.RPP-bak
+*.log
+
+# Archivos de Sistema
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temporales de Desarrollo
+*.tmp
+*.temp

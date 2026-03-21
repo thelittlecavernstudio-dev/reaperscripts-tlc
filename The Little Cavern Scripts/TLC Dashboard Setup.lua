@@ -1,8 +1,8 @@
--- @noindex
--- TLC Dashboard Setup
--- Version 1.0
--- Author: Jordi Molas - The Little Cavern Studio
--- About: This script allows you to configure how you want start your studio name, sessions, and templates.
+-- @description TLC Dashboard Setup
+-- @version 1.0
+-- @provides [main] . > The Little Cavern Scripts/TLC Dashboard Setup.lua
+-- @author Jordi Molas - The Little Cavern Studio
+-- @about This script allows you to configure how you want start your studio name, sessions, and templates.
 
 
 local db_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/Session_DB.txt"

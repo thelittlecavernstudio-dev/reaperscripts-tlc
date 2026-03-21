@@ -1,5 +1,6 @@
-desc: TLC A/B Metrix
-// @version 1.0
+desc: TLC - A/B Metrix
+// @version 1.2
+// @provides [main] . > The Little Cavern JSFX/TLC ABMetrix.jsfx
 // @author Jordi Molas - The Little Cavern Studio
 // @description A/B comparison utility for mixing and mastering.
 // @website https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc
@@ -474,8 +475,8 @@ s_ref_gain != 0 ? (
   strcpy(match_str, "0.0 dB (REF 0.0 dB)");
 );
 gfx_drawstr(match_str);
-gfx_setfont(1, "Arial", 24, "b"); gfx_measurestr("A/B Metrics", tw, th);
-tx = gfx_w - tw - 20; ty = (100 - th) / 2; gfx_x = tx; gfx_y = ty; gfx_set(1, 1, 1, 1); gfx_drawstr("A/B Metrics");
+gfx_setfont(1, "Arial", 24, "b"); gfx_measurestr("ABMetrix", tw, th);
+tx = gfx_w - tw - 20; ty = (100 - th) / 2; gfx_x = tx; gfx_y = ty; gfx_set(1, 1, 1, 1); gfx_drawstr("ABMetrix");
 gfx_getimgdim(1, img_w, img_h); img_w > 0 && img_h > 0 ? ( asp = img_w / img_h; dh = 45; dw = dh * asp; gfx_blit(1, 1, 0, 0, 0, img_w, img_h, gfx_w - dw - 15, (100 - dh) / 2, dw, dh); );
 
 // --- UPPER BLOCK ---

@@ -1,3 +1,8 @@
+-- @description TLC Dashboard
+-- @version 1.0
+-- @provides [main] . > The Little Cavern Scripts/TLC Dashboard.lua
+-- @author Jordi Molas - The Little Cavern Studio
+
 local db_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/Session_DB.txt"
 local ini_path = reaper.GetResourcePath() .. "/reaper.ini"
 local ruta_templates = reaper.GetResourcePath() .. "/ProjectTemplates/"
