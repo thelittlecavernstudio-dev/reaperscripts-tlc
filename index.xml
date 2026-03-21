@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="The Little Cavern" commit="f12bff5b7535b8004f29633e14a242f38d3885d5">
+<index version="1" name="The Little Cavern Scripts" commit="fa73819c991f86800c7a59a933f38d3885d5">
   
   <category name="Dashboard">
     <reapack name="TLC Dashboard.lua" type="script" desc="TLC Dashboard">
-      <version name="1.1" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T10:00:00Z">
+      <version name="1.1" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T10:15:00Z">
         <source main="main" file="TLC Dashboard.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/main/The%20Little%20Cavern%20Scripts/TLC%20Dashboard.lua</source>
       </version>
     </reapack>

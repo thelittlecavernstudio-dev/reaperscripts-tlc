@@ -3,7 +3,7 @@
 -- @provides [main] . > TLC Dashboard.lua
 -- @author Jordi Molas - The Little Cavern Studio
 
-local db_path = reaper.GetResourcePath() .. "/Scripts/The Little Cavern/Session_DB.txt"
+local db_path = reaper.GetResourcePath() .. "/Scripts/The Little Cavern Scripts/Session_DB.txt"
 local ini_path = reaper.GetResourcePath() .. "/reaper.ini"
 local ruta_templates = reaper.GetResourcePath() .. "/ProjectTemplates/"
 
@@ -134,12 +134,12 @@ function main()
     local curr_y = 55
     if #sessions == 0 then
         if draw_session_button(curr_y, "Create your home screen now", {100, 150, 100}) then
-            local builder_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/TLC Dashboard Setup.lua"
+            local builder_path = reaper.GetResourcePath() .. "/Scripts/The Little Cavern Scripts/TLC Dashboard Setup.lua"
             local cmd_id = reaper.AddRemoveReaScript(true, 0, builder_path, true)
             if cmd_id ~= 0 then
                 reaper.Main_OnCommand(cmd_id, 0)
             else
-                reaper.ShowMessageBox("TLC Dashboard Setup.lua not found in /Scripts/jmolas_scripts/", "Error", 0)
+                reaper.ShowMessageBox("TLC Dashboard Setup.lua not found in /Scripts/The Little Cavern Scripts/", "Error", 0)
             end
             gfx.quit()
         end
