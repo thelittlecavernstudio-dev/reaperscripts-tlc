@@ -2,7 +2,7 @@ local db_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/Session_DB.
 local ini_path = reaper.GetResourcePath() .. "/reaper.ini"
 local ruta_templates = reaper.GetResourcePath() .. "/ProjectTemplates/"
 
--- Leer el nombre del estudio configurado en el TLC_Dashboard_Setup.lua
+-- Leer el nombre del estudio configurado en el TLC Dashboard Setup.lua
 local studio_name = reaper.GetExtState("SessionBuilder", "StudioName")
 if studio_name == "" then studio_name = "LITTLE CAVERN" end
 
@@ -129,12 +129,12 @@ function main()
     local curr_y = 55
     if #sessions == 0 then
         if draw_session_button(curr_y, "Create your home screen now", {100, 150, 100}) then
-            local builder_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/TLC_Dashboard_Setup.lua"
+            local builder_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/TLC Dashboard Setup.lua"
             local cmd_id = reaper.AddRemoveReaScript(true, 0, builder_path, true)
             if cmd_id ~= 0 then
                 reaper.Main_OnCommand(cmd_id, 0)
             else
-                reaper.ShowMessageBox("TLC_Dashboard_Setup.lua not found in /Scripts/jmolas_scripts/", "Error", 0)
+                reaper.ShowMessageBox("TLC Dashboard Setup.lua not found in /Scripts/jmolas_scripts/", "Error", 0)
             end
             gfx.quit()
         end

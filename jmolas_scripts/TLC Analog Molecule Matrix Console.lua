@@ -1,4 +1,4 @@
--- @description TLC_Analog Molecule Matrix Console
+-- @description TLC Analog Molecule Matrix Console
 -- @version 1.0
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about This external Lua script scans your session and automatically changes the topology of each track based on a smart configuration. You can define exactly where to apply each topology using keywords:

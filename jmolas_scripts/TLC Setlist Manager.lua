@@ -1,4 +1,4 @@
--- @description TLC_Setlist Manager Pro
+-- @description TLC Setlist Manager
 -- @version 1.0
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about

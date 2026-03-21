@@ -1,4 +1,4 @@
--- @description TLC_Locate True Peaks
+-- @description TLC Locate True Peaks
 -- @version 1.0.1
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about I use this script post-mixbus bounce to catch any stray peaks. It's also my go-to for finding the absolute highest dBTP on individual tracks like snare or bass. Very handy for gain staging.
