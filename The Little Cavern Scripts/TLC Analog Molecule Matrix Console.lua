@@ -1,6 +1,6 @@
 -- @description TLC Analog Molecule Matrix Console
--- @version 1.0
--- @provides [main] . > The Little Cavern Scripts/TLC Analog Molecule Matrix Console.lua
+-- @version 1.1
+-- @provides [main] . > TLC Analog Molecule Matrix Console.lua
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about This external Lua script scans your session and automatically changes the topology of each track based on a smart configuration. You can define exactly where to apply each topology using keywords:
 -- Master: If you use a track named, for instance, "Mixbus" instead of the default REAPER Master, you can specify it in the Settings.

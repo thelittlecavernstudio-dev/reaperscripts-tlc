@@ -1,6 +1,6 @@
 -- @description TLC Setlist Manager
--- @version 1.0
--- @provides [main] . > The Little Cavern Scripts/TLC Setlist Manager.lua
+-- @version 1.1
+-- @provides [main] . > TLC Setlist Manager.lua
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about
 --   Automates the loading of multiple RPP files into project tabs.

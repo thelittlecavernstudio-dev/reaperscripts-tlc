@@ -1,11 +1,11 @@
 -- @description TLC Dashboard Setup
--- @version 1.0
--- @provides [main] . > The Little Cavern Scripts/TLC Dashboard Setup.lua
+-- @version 1.1
+-- @provides [main] . > TLC Dashboard Setup.lua
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about This script allows you to configure how you want start your studio name, sessions, and templates.
 
 
-local db_path = reaper.GetResourcePath() .. "/Scripts/jmolas_scripts/Session_DB.txt"
+local db_path = reaper.GetResourcePath() .. "/Scripts/The Little Cavern/Session_DB.txt"
 
 -- Recuperar Nombre del Estudio de la memoria de REAPER
 local saved_studio = reaper.GetExtState("SessionBuilder", "StudioName")

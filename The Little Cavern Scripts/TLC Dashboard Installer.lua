@@ -1,6 +1,6 @@
 -- @description TLC Dashboard Installer
--- @version 1.0
--- @provides [main] . > The Little Cavern Scripts/TLC Dashboard Installer.lua
+-- @version 1.1
+-- @provides [main] . > TLC Dashboard Installer.lua
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about
 --   Dynamic dashboard for launching sessions and recent projects.
@@ -15,6 +15,3 @@
 --   3. Right-click on it and select "Copy selected action command ID".
 --   4. In the top menu, go to: Extensions > SWS Options > Enable global startup action.
 --   5. Paste the ID and hit OK!
--- @provides
---   [main] TLC_Dashboard.lua
---   [main] TLC_Dashboard_Setup.lua

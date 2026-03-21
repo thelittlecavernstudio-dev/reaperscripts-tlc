@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="The Little Cavern Studio" commit="c9fa3d9e6776b72bff3751856acb25bfa5be224b">
+<index version="1" name="The Little Cavern" commit="c9fa3d9e6776b72bff3751856acb25bfa5be224b">
+  <!-- CATEGORÍA: DASHBOARD -->
+  <!-- CATEGORÍA: MIXING / CONSOLE -->
+  <!-- CATEGORÍA: MASTERING / ANALYSIS -->
+  <!-- CATEGORÍA: WORKFLOW / LIVE -->
+  <category name="Dashboard">
+    <reapack name="TLC Dashboard Installer.lua" type="script" desc="TLC Dashboard Installer">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T08:45:33Z">
+        <source main="main" file="TLC Dashboard Installer.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c9fa3d9e6776b72bff3751856acb25bfa5be224b/The%20Little%20Cavern%20Scripts/TLC%20Dashboard%20Installer.lua</source>
+      </version>
+    </reapack>
+    <reapack name="TLC Dashboard Setup.lua" type="script" desc="TLC Dashboard Setup">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T08:45:33Z">
+        <source main="main" file="TLC Dashboard Setup.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c9fa3d9e6776b72bff3751856acb25bfa5be224b/The%20Little%20Cavern%20Scripts/TLC%20Dashboard%20Setup.lua</source>
+      </version>
+    </reapack>
+    <reapack name="TLC Dashboard.lua" type="script" desc="TLC Dashboard">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T08:45:33Z">
+        <source main="main" file="TLC Dashboard.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c9fa3d9e6776b72bff3751856acb25bfa5be224b/The%20Little%20Cavern%20Scripts/TLC%20Dashboard.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Mastering">
+    <reapack name="TLC ABMetrix.jsfx" type="effect" desc="TLC - A/B Metrix">
+      <version name="1.2" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T08:45:33Z">
+        <source file="TLC ABMetrix.jsfx">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c9fa3d9e6776b72bff3751856acb25bfa5be224b/The%20Little%20Cavern%20JSFX/TLC%20ABMetrix/TLC%20ABMetrix.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="TLC Locate True Peaks.lua" type="script" desc="TLC Locate True Peaks">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T08:45:33Z">
+        <source main="main" file="TLC Locate True Peaks.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c9fa3d9e6776b72bff3751856acb25bfa5be224b/The%20Little%20Cavern%20Scripts/TLC%20Locate%20True%20Peaks.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Mixing">
+    <reapack name="TLC Analog Molecule Matrix Console.lua" type="script" desc="TLC Analog Molecule Matrix Console">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T08:45:33Z">
+        <source main="main" file="TLC Analog Molecule Matrix Console.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c9fa3d9e6776b72bff3751856acb25bfa5be224b/The%20Little%20Cavern%20Scripts/TLC%20Analog%20Molecule%20Matrix%20Console.lua</source>
+      </version>
+    </reapack>
+  </category>
   <category name="The Little Cavern JSFX/TLC ABMetrix">
     <reapack name="TLC ABMetrix.jsfx" type="effect" desc="TLC - A/B Metrix">
       <metadata>
@@ -77,6 +117,13 @@
       </metadata>
       <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T08:45:33Z">
         <source main="main" file="The Little Cavern Scripts/TLC Setlist Manager.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c9fa3d9e6776b72bff3751856acb25bfa5be224b/The%20Little%20Cavern%20Scripts/TLC%20Setlist%20Manager.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Workflow">
+    <reapack name="TLC Setlist Manager.lua" type="script" desc="TLC Setlist Manager">
+      <version name="1.0" author="Jordi Molas - The Little Cavern Studio" time="2026-03-21T08:45:33Z">
+        <source main="main" file="TLC Setlist Manager.lua">https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc/raw/c9fa3d9e6776b72bff3751856acb25bfa5be224b/The%20Little%20Cavern%20Scripts/TLC%20Setlist%20Manager.lua</source>
       </version>
     </reapack>
   </category>
