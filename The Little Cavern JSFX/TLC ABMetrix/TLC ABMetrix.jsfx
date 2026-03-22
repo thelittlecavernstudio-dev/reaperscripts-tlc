@@ -1,6 +1,6 @@
 desc: TLC A/B Metrix
 // @version 1.2
-// @provides [main] . > The Little Cavern JSFX/TLC ABMetrix.jsfx
+// @provides [main] . > /The Little Cavern JSFX/TLC ABMetrix.jsfx
 // @author Jordi Molas - The Little Cavern Studio
 // @description A/B comparison utility for mixing and mastering.
 // @website https://github.com/thelittlecavernstudio-dev/reaperscripts-tlc
