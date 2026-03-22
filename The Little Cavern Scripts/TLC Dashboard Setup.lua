@@ -1,6 +1,6 @@
 -- @description TLC Dashboard Setup
 -- @version 1.2
--- @provides [main] . > TLC Dashboard Setup.lua
+-- @provides [main] . > The Little Cavern Scripts/TLC Dashboard Setup.lua
 -- @author Jordi Molas - The Little Cavern Studio
 -- @about This script allows you to configure how you want start your studio name, sessions, and templates.
 
