@@ -1,0 +1,8 @@
+Blank||0||255, 255, 255
+Recording Ambient|Recording session.rpp|40456||103, 207, 192
+Recording Modern|Recording Modern.rpp|40456||204, 65, 65
+Mixing UAD|Mix Template UAD.rpp|0||255, 0, 149
+Mixing Free|Mix Template Free.rpp|0||200, 207, 78
+Mastering||40457|_30bcbb83adf47f40ab0e07b6c4d6cd2d|0, 255, 38,Recording Modern|Recording Modern.rpp|0||78, 207, 78||||150,150,150
+||||150,150,150
+||||150,150,150
