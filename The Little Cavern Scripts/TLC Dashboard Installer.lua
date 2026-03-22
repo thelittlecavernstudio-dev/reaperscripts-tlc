@@ -1,6 +1,6 @@
 -- @description TLC Dashboard Installer
 -- @version 1.2
--- @provides [main] . > /The Little Cavern Scripts/TLC Dashboard Installer.lua
+-- @provides [main] .
 -- @author Jordi Molas - The Little Cavern Studio
 
 function Msg(str)

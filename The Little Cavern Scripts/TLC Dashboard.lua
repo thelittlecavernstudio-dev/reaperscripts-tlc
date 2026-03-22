@@ -2,8 +2,8 @@
 -- @version 1.2.3
 -- @author Jordi Molas - The Little Cavern
 -- @provides
---   [main] . > /The Little Cavern Scripts/TLC Dashboard.lua
---   DashboardSetup_DBt.txt > /The Little Cavern Scripts/DashboardSetup_DBt.txt
+--   [main] .
+--   DashboardSetup_DBt.txt
 
 -- Detección dinámica de la ruta del script
 local script_path = debug.getinfo(1, "S").source:match("@?(.*[\\/])")
